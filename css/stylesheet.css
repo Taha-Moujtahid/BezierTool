@@ -1,5 +1,5 @@
 body{
-  background-color: #EEEEEE;
+  background-color: #3F51B5;
 }
 
 .center-page{
@@ -11,7 +11,7 @@ body{
 
 #canvas{
   width: 70%;
-  height: 50%;
+  height: 70%;
   background-color: #90A4AE;
   border-radius: 12px;
 }
