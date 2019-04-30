@@ -1,0 +1,17 @@
+body{
+  background-color: #EEEEEE;
+}
+
+.center-page{
+  position: absolute;
+  transform: translate(-50%,-50%);
+  left: 50%;
+  top: 50%;
+}
+
+#canvas{
+  width: 70%;
+  height: 50%;
+  background-color: #90A4AE;
+  border-radius: 12px;
+}
