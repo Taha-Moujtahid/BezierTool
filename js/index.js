@@ -51,20 +51,18 @@ function removeCurve(){
 }
 
 function calcCurvePoints(){
-    for(t = 0; t < 1; t+=1/tMax){
-      var calculatedVectors = vectors;
+    for(t = 0; t < 1; t+=1/tMax){                                               //fängt bei 0 an und hört bei 1 auf. bei mehr punkten wird die kurve runder, bei weniger punkten eckiger
+      var calculatedVectors = vectors;                                          //vektor = die pinken punkte
       var temp = [];
       while(calculatedVectors.length > 1){
         for(n = 0; n < calculatedVectors.length-1; n++){
-            console.log("Point between "+n+" & "+(n+1));
             temp.push(calcPoint(calculatedVectors[n],calculatedVectors[n+1],t));
-            console.log(calculatedVectors.length);
-
         }
         calculatedVectors = temp;
         temp = [];
       }
       cVectors.push(calculatedVectors[0]);
+
       var point = draw.circle(pointRadius);
       point.attr({cx : calculatedVectors[0].x , cy : calculatedVectors[0].y });
       point.fill('#673AB7');
