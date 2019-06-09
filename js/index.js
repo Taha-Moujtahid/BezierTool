@@ -1,115 +1,100 @@
 var draw = SVG('canvas').size(window.innerWidth*0.7, window.innerHeight*0.7);
-var vectors   = [];
-var cVectors  = [];
-var points    = [];
-var lines     = [];
-let pointRadius = 10;
-var calculatedLines   = [];
-var calculatedPoints  = [];
-var tMax = 10;
+var points = [];
+var curves = [];
+
+var pointClicked = false;
 
 document.addEventListener('keydown', function(event) {
     console.log(event.keyCode);
     if(event.keyCode == 8){
       removePoint();
     }else if(event.keyCode == 13){
-      calcCurvePoints();
-      drawCurveLine();
+      curves.forEach(function(curve){
+        curve.draw();
+      });
     }
 });
+
+document.getElementById('canvas').addEventListener('mousemove',function(event){
+  var mousePosition = getMousePosition(event);
+  curves.forEach(function(curve){
+    curve.onPointDrag(mousePosition);
+  });
+});
+
+document.getElementById('canvas').addEventListener('mousedown',function(event){
+  var mousePosition = getMousePosition(event);
+  var isPointPressed = false;
+
+  curves.forEach(function(curve){
+    if(curve.onPointDragStart(mousePosition)){
+      isPointPressed = true;
+      var equations = "";
+      curves.forEach(function(curve){
+        equations += curve.getMaths() + " \n ";
+      });
+      document.getElementById("mathematics").innerHTML = equations;
+    }
+  });
+  if(!isPointPressed){
+    addPoint(mousePosition);
+  }
+});
+
+document.getElementById('canvas').addEventListener('mouseup',function(event){
+  var mousePosition = getMousePosition(event);
+  curves.forEach(function(curve){
+    curve.onPointDragStop(mousePosition)
+  });
+});
+
+function pointMouseDown(event){
+  console.log("Down!");
+  pointClicked = true;
+}
+
+function pointMouseUp(event){
+  console.log("up!");
+  pointClicked = false;
+}
+
+function addPoint(mousePosition){
+  points.push(new Point(mousePosition));
+
+  if(points.length >= 2){
+    addCurve(new BezierCurve(points[points.length-2],points[points.length-1]));
+  }
+
+}
+
+function addCurve(nCurve){
+  curves.push(nCurve);
+  nCurve.draw();
+}
+
+function removePoint(){
+  if(points.length > 0){
+    if(curves.length >= 2){
+      curves[curves.length-1].delete();
+      curves.pop();
+    }else{
+      curves[0].points[0].remove();
+      curves[0].delete();
+      curves.pop();
+      points.pop();
+    }
+    points.pop();
+  }
+}
 
 function tChange(){
   tMax = document.getElementById("t").value;
 }
 
-function addPoint(event){
-  removeCurve();
-  event.preventDefault();
-  vectors.push(getMousePosition(event));
-  var point = draw.circle(pointRadius);
-  point.attr({cx : vectors[vectors.length-1].x, cy : vectors[vectors.length-1].y});
-  point.fill('#E91E63');
-  points.push(point);
-  console.log("P: "+JSON.stringify(vectors[vectors.length-1]));
-  if(points.length >= 2){
-    console.log("plot");
-    lines.push(draw.line(vectors[vectors.length-2].x,vectors[vectors.length-2].y,
-              vectors[vectors.length-1].x,vectors[vectors.length-1].y).stroke({width: 2}));
-  }
-}
-
-function removeCurve(){
-  cVectors = [];
-  for(i = 0; i != calculatedPoints.length; i++){
-    calculatedPoints[i].remove();
-  }
-  calculatedPoints = [];
-  for(i = 0; i != calculatedLines.length; i++){
-    calculatedLines[i].remove();
-  }
-  calculatedLines = [];
-}
-
-function calcCurvePoints(){
-    for(t = 0; t < 1; t+=1/tMax){                                               //fängt bei 0 an und hört bei 1 auf. bei mehr punkten wird die kurve runder, bei weniger punkten eckiger
-      var calculatedVectors = vectors;                                          //vektor = die pinken punkte
-      var temp = [];
-      while(calculatedVectors.length > 1){
-        for(n = 0; n < calculatedVectors.length-1; n++){
-            temp.push(calcPoint(calculatedVectors[n],calculatedVectors[n+1],t));
-        }
-        calculatedVectors = temp;
-        temp = [];
-      }
-      cVectors.push(calculatedVectors[0]);
-
-      var point = draw.circle(pointRadius);
-      point.attr({cx : calculatedVectors[0].x , cy : calculatedVectors[0].y });
-      point.fill('#673AB7');
-      calculatedPoints.push(point);
-    }
-}
-
-function drawCurveLine(){
-  for(i = 0; i != cVectors.length-1; i++){
-    calculatedLines.push(draw.line(cVectors[i].x,cVectors[i].y,
-              cVectors[i+1].x,cVectors[i+1].y).stroke({width: 3}));
-  }
-}
-
-function clearArray(array){
-  for(i = 0; i != array.length; i++){
-    array.pop();
-  }
-}
-
-function calcPoint(startVec,endVec,t){
-  sx = startVec.x;
-  sy = startVec.y;
-  ex = endVec.x;
-  ey = endVec.y;
-  vec = {x : sx + (sx - ex)*-t, y : sy + (sy - ey)*-t}
-  return vec;
-}
-
-function removePoint(){
-  if(vectors.length > 0){
-    console.log("remove Point");
-    vectors.pop();
-    points[points.length-1].remove();
-    points.pop();
-    lines[lines.length-1].remove();
-    lines.pop();
-  }
-  removeCurve();
-  calcCurvePoints();
-  drawCurveLine();
-}
-
 function getMousePosition(event){
   var rect = canvas.getBoundingClientRect();
-    return {
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top
-    };
+  return {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  };
 }
