@@ -1,4 +1,4 @@
-var draw = SVG('canvas').size(window.innerWidth*0.7, window.innerHeight*0.7);
+var draw = SVG('canvas').size(window.innerWidth*0.99, window.innerHeight*0.7);
 var points = [];
 var curves = [];
 
@@ -31,7 +31,7 @@ document.getElementById('canvas').addEventListener('mousedown',function(event){
       isPointPressed = true;
       var equations = "";
       curves.forEach(function(curve){
-        equations += curve.getMaths() + " \n ";
+        equations += curve.getMaths() + " <br> ";
       });
       document.getElementById("mathematics").innerHTML = equations;
     }
@@ -85,10 +85,6 @@ function removePoint(){
     }
     points.pop();
   }
-}
-
-function tChange(){
-  tMax = document.getElementById("t").value;
 }
 
 function getMousePosition(event){

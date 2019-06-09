@@ -31,8 +31,8 @@ class BezierCurve {
     var E = this.End.position;
     var Cp1 = this.Cp1.position;
     var Cp2 = this.Cp2.position;
-    return " x = \("+S.x+"* (1-t)^3 +"+ Cp1.x +" * 3 * (1-t)^2 *t +" + Cp2.x + "* 3 * (1-t) * t^2 +" + E.x + " * t^3 \) \n"+
-    "y = \("+S.y+"* (1-t)^3 +"+ Cp1.y +" * 3 * (1-t)^2 *t +" + Cp2.y + "* 3 * (1-t) * t^2 +" + E.y + " * t^3 \)";
+    return " x = \("+S.x+"* (1-t)^3 +"+ Cp1.x +" * 3 * (1-t)^2 *t +" + Cp2.x + "* 3 * (1-t) * t^2 +" + E.x + " * t^3 \) <br> "+
+    "y = \("+S.y+"* (1-t)^3 +"+ Cp1.y +" * 3 * (1-t)^2 *t +" + Cp2.y + "* 3 * (1-t) * t^2 +" + E.y + " * t^3 \) <br> ";
   }
 
   draw = function(){

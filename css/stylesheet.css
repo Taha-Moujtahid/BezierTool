@@ -10,8 +10,12 @@ body{
 }
 
 #canvas{
-  width: 70%;
+  width: 99%;
   height: 70%;
   background-color: #90A4AE;
   border-radius: 12px;
+}
+
+#mathematics{
+  background-color: #9E9E9E;
 }
