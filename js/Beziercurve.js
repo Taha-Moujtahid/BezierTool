@@ -11,8 +11,8 @@ class BezierCurve {
     this.points.push(this.Cp1);
     this.points.push(this.Cp2);
     this.points.push(this.End);
-
     this.lines = [];
+    this.drawcall = 0;
   }
 
   B = function (t){
@@ -35,15 +35,22 @@ class BezierCurve {
     "y = \("+S.y+"* (1-t)^3 +"+ Cp1.y +" * 3 * (1-t)^2 *t +" + Cp2.y + "* 3 * (1-t) * t^2 +" + E.y + " * t^3 \) <br> ";
   }
 
-  draw = function(){
+  addLine = function(from, to, drawcall){
+    if(this.drawcall == drawcall)
+    this.lines.push(draw.line(from.x,from.y,to.x,to.y).stroke({width: 3}));
+  }
+
+  draw = async function(){
     this.remove();
     var curvePoints = [];
     for(var t = 0; t < 1; t+=0.01){ //// TODO: Change 10 to tmax
       curvePoints.push(this.B(t));
     }
+    this.drawcall++
+    var dc = this.drawcall;
     for(var i = 0; i != curvePoints.length-1; i++){
-      this.lines.push(draw.line(curvePoints[i].x,curvePoints[i].y,
-                curvePoints[i+1].x,curvePoints[i+1].y).stroke({width: 3}));
+      this.addLine(curvePoints[i],curvePoints[i+1],dc);
+      await sleep(15);
     }
   }
 

@@ -94,3 +94,7 @@ function getMousePosition(event){
     y: event.clientY - rect.top
   };
 }
+
+sleep = function(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
