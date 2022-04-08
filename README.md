@@ -2,7 +2,7 @@
   BezierTool ist ein Tool zum Zeichnen von Bezier Kurven und wurde für die Gruppe "M03 Bezier-Kurven" programmiert.
 
 # Controls
-  - Mit der linken Maustaste auf die Graue bildfläche klicken um einen neuen Punkt hinzuzufügen.
+  - Mit der linken Maustaste auf die graue Bildfläche klicken um einen neuen Punkt hinzuzufügen.
   - Mit der linken Maustaste auf einen bereits vorhandenen Punkt klicken um diesen zu ziehen.
   - Mit Backspace den letzten punkt löschen 
 
